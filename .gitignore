@@ -1,0 +1,6 @@
+*.obj
+*.exe
+*.out
+in*
+out*
+[\x01-\x2D\x2F-\xFF]+
