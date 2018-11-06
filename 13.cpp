@@ -24,26 +24,20 @@ int bfs(int si,int sj,int ti,int tj,int n)
 	//上下左右を探索
 	int x=sj;
 	int y=si;
-	if(x<w-1 && m[y][x+1]==n && make_pair(y,x+1)!=goal)
+	int dx[]={0,1,0,-1};
+	int dy[]={1,0,-1,0};//上右下左の順番
+	for(int i=0;i<4;i++)
 	{
-		check[y][x+1]=true;
-		q.push_back(make_pair(y,x+1));
+		if(x+dx[i]<w && x+dx[i]>-1 && y+dy[i]>-1 && y+dy[i]<h)
+		{
+			if(m[y+dy[i]][x+dx[i]]==n && make_pair(y+dy[i],x+dx[i])!=goal)
+			{
+				check[y+dy[i]][x+dx[i]]=true;
+				q.push_back(make_pair(y+dy[i],x+dx[i]));
+			}
+		}
 	}
-	if(x>0 && m[y][x-1]==n && make_pair(y,x-1)!=goal)
-	{
-		check[y][x-1]=true;
-		q.push_back(make_pair(y,x-1));
-	}
-	if(y<h-1 && m[y+1][x]==n && make_pair(y+1,x)!=goal)
-	{
-		check[y+1][x]=true;
-		q.push_back(make_pair(y+1,x));
-	}
-	if(y<h+1 && m[y-1][x]==n && make_pair(y-1,x)!=goal)
-	{
-		check[y-1][x]=true;
-		q.push_back(make_pair(y-1,x));
-	}
+	
 	//ここからBFS
 	while(!q.empty())
 	{
@@ -56,25 +50,18 @@ int bfs(int si,int sj,int ti,int tj,int n)
 			return 1;
 		}
 		//上下左右を探索
-		if(x<w-1 && m[y][x+1]==n && !check[y][x+1])
+		for(int i=0;i<4;i++)
 		{
-			check[y][y+1]=true;
-			q.push_back(make_pair(y,x+1));
-		}
-		if(x>0 && m[y][x-1]==n && !check[y][x-1])
-		{
-			check[y][x-1]=true;
-			q.push_back(make_pair(y,x-1));
-		}
-		if(y<h-1 && m[y+1][x]==n && !check[y+1][x])
-		{
-			check[y+1][x]=true;
-			q.push_back(make_pair(y+1,x));
-		}
-		if(y<h+1 && m[y-1][x]==n && !check[y-1][x])
-		{
-			check[y-1][x]=true;
-			q.push_back(make_pair(y-1,x));
+			int ax=x+dx[i];
+			int ay=y+dy[i];
+			if(ax<w && ax>-1 && ay>-1 && ay<h)
+			{
+				if(m[ay][ax]==n && !check[ay][ax])
+				{
+					check[ay][ax]=true;
+					q.push_back(make_pair(ay,ax));
+				}
+			}
 		}
 	}
 	return 0;
@@ -103,7 +90,7 @@ int main()
 			if(j>0 && m[i][j]==m[i][j-1])
 				ans+=bfs(i,j,i,j-1,m[i][j]);
 			if(j<w-1 && m[i][j]==m[i][j-1])
-				ans+=bfs(i,j,i,j-1,m[i][j]);
+				ans+=bfs(i,j,i,j+1,m[i][j]);
 			if(ans!=0)
 			{
 				//cerr<<n<<" "<<j<<" "<<i<<endl;
